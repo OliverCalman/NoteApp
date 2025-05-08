@@ -9,8 +9,9 @@ import SwiftUI
 
 struct NoteModel: Identifiable {
     let id = UUID()
-    let colour: Color
-    let position: CGPoint
-    let width: CGFloat
-    let height: CGFloat
+    var colour: Color
+    var position: CGPoint
+    var size: CGSize
+    var text: String = ""
+    var isEditing: Bool = false   
 }
