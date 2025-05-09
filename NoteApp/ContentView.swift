@@ -31,7 +31,7 @@ struct ContentView: View {
                             .contentShape(Rectangle())
                             .onTapGesture { endEditing() }
 
-                        //array of notes
+                        // array of notes
                         ForEach(notes) { note in
                             NoteView(
                                 note: binding(for: note),
@@ -45,7 +45,7 @@ struct ContentView: View {
                     }
                 }
 
-                //create new notes
+                //create new notes button
                 VStack { Spacer()
                     Button(action: { addNote(in: geo.size, safeTop: safeTop) }) {
                         Image(systemName: "plus")
@@ -62,7 +62,6 @@ struct ContentView: View {
         }
     }
 
-
     //locate the note being moved, sized, or edited
     private func binding(for note: NoteModel) -> Binding<NoteModel> {
         guard let idx = notes.firstIndex(where: { $0.id == note.id }) else {
@@ -75,7 +74,6 @@ struct ContentView: View {
     private func addNote(in size: CGSize, safeTop: CGFloat) {
         let side = (size.width - 3*spacing) / 2
         let topY = safeTop + spacing
-        //compute X slots and select first free
         var xs = [spacing]
         notes.filter { abs($0.position.y - topY) < 1 }.forEach {
             xs.append($0.position.x + $0.size.width + spacing)
@@ -85,11 +83,9 @@ struct ContentView: View {
             x + side <= size.width - spacing &&
             !notes.contains(where: { CGRect(origin: CGPoint(x: x, y: topY), size: CGSize(width: side, height: side)).intersects(CGRect(origin: $0.position, size: $0.size)) })
         }) ?? spacing
-        //push down if needed
         if xPos == spacing && notes.contains(where: { $0.position.y == topY && $0.position.x == spacing }) {
             notes.indices.forEach { notes[$0].position.y += side + spacing }
         }
-        //append new note
         let newNote = NoteModel(colour: Color(hue: Double.random(in: 0...1), saturation: 0.3, brightness: 1),
                                 position: CGPoint(x: xPos, y: topY),
                                 size: CGSize(width: side, height: side))
@@ -112,7 +108,6 @@ struct ContentView: View {
 
     //updates array when finished moving
     private func reorderAfterMove(id: UUID, in size: CGSize, safeTop: CGFloat) {
-        //sort notes by position (left-right-down)
         notes.sort { a, b in
             if abs(a.position.y - b.position.y) > 1 {
                 return a.position.y < b.position.y
@@ -125,26 +120,33 @@ struct ContentView: View {
         }
     }
 
-    //clamps and stops overlap
+    //clamps and stops overlap. Stacks notes to the top of each column like they're buoyant
     private func resolveOverlaps(in size: CGSize, safeTop: CGFloat) {
         let topY = safeTop + spacing
-        
+        //overlaps
         notes.indices.forEach { i in
             notes[i].position.x = clamp(notes[i].position.x,
                                         min: spacing,
                                         max: size.width - notes[i].size.width - spacing)
             notes[i].position.y = max(notes[i].position.y, topY)
         }
-        //overlaps
-        notes.indices.forEach { i in
-            let rectA = CGRect(origin: notes[i].position, size: notes[i].size)
-            notes.indices.forEach { j in
-                if i != j {
-                    let rectB = CGRect(origin: notes[j].position, size: notes[j].size)
-                    if rectA.intersects(rectB) {
-                        notes[j].position.y = rectA.maxY + spacing
-                    }
-                }
+        //separate columns and stack to top
+        let leftColumn = notes.filter { $0.position.x < size.width/2 }
+                              .sorted { $0.position.y < $1.position.y }
+        let rightColumn = notes.filter { $0.position.x >= size.width/2 }
+                               .sorted { $0.position.y < $1.position.y }
+        var yLeft = topY
+        for note in leftColumn {
+            if let idx = notes.firstIndex(where: { $0.id == note.id }) {
+                notes[idx].position.y = yLeft
+                yLeft += notes[idx].size.height + spacing
+            }
+        }
+        var yRight = topY
+        for note in rightColumn {
+            if let idx = notes.firstIndex(where: { $0.id == note.id }) {
+                notes[idx].position.y = yRight
+                yRight += notes[idx].size.height + spacing
             }
         }
         //set responsive scroll height
@@ -152,7 +154,7 @@ struct ContentView: View {
         scrollHeight = max(maxY + spacing, size.height)
     }
 
-    //clamp method (can be merged to noteview)
+    //clamp method (can be merged to NoteView)
     private func clamp(_ value: CGFloat, min: CGFloat, max: CGFloat) -> CGFloat {
         Swift.min(Swift.max(value, min), max)
     }

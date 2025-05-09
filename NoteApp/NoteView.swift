@@ -13,7 +13,7 @@ struct NoteView: View {
     let onMoveEnd: (UUID) -> Void
     let onDelete: (UUID) -> Void
 
-    //states for size and move functions
+    // states for move & resize - records original size when moving or sizing
     @State private var dragOrigin: CGPoint = .zero
     @State private var sizeOrigin: CGSize = .zero
 
@@ -24,13 +24,12 @@ struct NoteView: View {
 
     var body: some View {
         ZStack(alignment: .topLeading) {
-            
             Rectangle()
                 .fill(note.colour)
                 .cornerRadius(8)
                 .shadow(radius: 2)
 
-            //Text area + edit view
+            //text area + edit view + default text
             Group {
                 if note.isEditing {
                     TextEditor(text: $note.text)
@@ -38,7 +37,6 @@ struct NoteView: View {
                 } else {
                     //default text
                     Text(note.text.isEmpty ? "New Note" : note.text)
-                    //note.text :
                         .padding(8)
                         .onTapGesture { note.isEditing = true }
                 }
@@ -60,10 +58,11 @@ struct NoteView: View {
                 .gesture(dragGesture)
                 .foregroundStyle(.black)
 
-            // Resize handle
+            //resize handle
             Image(systemName: "arrow.up.left.and.arrow.down.right")
                 .frame(width: handleSize, height: handleSize)
-                .offset(x: note.size.width - handleSize, y: note.size.height - handleSize)
+                .offset(x: note.size.width - handleSize,
+                        y: note.size.height - handleSize)
                 .gesture(resizeGesture)
                 .foregroundStyle(.black)
         }
@@ -82,7 +81,7 @@ struct NoteView: View {
                                  max: parentSize.width - note.size.width - spacing)
                 let newY = clamp(dragOrigin.y + v.translation.height,
                                  min: safeTop + spacing,
-                                 max: .infinity)
+                                 max: parentSize.height - note.size.height - spacing)
                 note.position = CGPoint(x: newX, y: newY)
             }
             .onEnded { _ in
@@ -91,16 +90,20 @@ struct NoteView: View {
             }
     }
 
-    //resize updates size using drag gesture and clamps width
+    //resize updates size using drag gesture and clamps width and height
     private var resizeGesture: some Gesture {
         DragGesture()
             .onChanged { v in
                 if sizeOrigin == .zero { sizeOrigin = note.size }
                 let maxW = parentSize.width - note.position.x - spacing
-                let newSide = clamp(sizeOrigin.width + v.translation.width,
-                                    min: minSize,
-                                    max: maxW)
-                note.size = CGSize(width: newSide, height: newSide)
+                let maxH = parentSize.height - note.position.y - spacing
+                let newWidth = clamp(sizeOrigin.width + v.translation.width,
+                                     min: minSize,
+                                     max: maxW)
+                let newHeight = clamp(sizeOrigin.height + v.translation.height,
+                                      min: minSize,
+                                      max: maxH)
+                note.size = CGSize(width: newWidth, height: newHeight)
             }
             .onEnded { _ in sizeOrigin = .zero }
     }
