@@ -5,9 +5,13 @@
 //  Created by Oliver Calman on 8/5/2025.
 //
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> 64f1bef4d31f05b21eff382ba81af792b2b66864
+=======
+
+>>>>>>> be4e6e5 (Initial commit on my-feature branch)
 import SwiftUI
 
 struct NoteView: View {
@@ -18,6 +22,9 @@ struct NoteView: View {
     let onDelete: (UUID) -> Void
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> be4e6e5 (Initial commit on my-feature branch)
     // 分类列表，与 ContentView 保持一致
     private let categories = ["Work", "Personal", "Ideas", "Shopping", "Uncategorized"]
 
@@ -26,6 +33,7 @@ struct NoteView: View {
     @State private var isFullScreen: Bool = false
     @FocusState private var isFocused: Bool
 
+<<<<<<< HEAD
 =======
     //states for size and move functions
     @State private var dragOrigin: CGPoint = .zero
@@ -33,6 +41,8 @@ struct NoteView: View {
 
     //config size and buffer between notes
 >>>>>>> 64f1bef4d31f05b21eff382ba81af792b2b66864
+=======
+>>>>>>> be4e6e5 (Initial commit on my-feature branch)
     private let minSize: CGFloat = 120
     private let handleSize: CGFloat = 24
     private let spacing: CGFloat = 8
@@ -40,16 +50,23 @@ struct NoteView: View {
     var body: some View {
         ZStack(alignment: .topLeading) {
 <<<<<<< HEAD
+<<<<<<< HEAD
             // 笔记背景
 =======
             
 >>>>>>> 64f1bef4d31f05b21eff382ba81af792b2b66864
+=======
+            // 笔记背景
+>>>>>>> be4e6e5 (Initial commit on my-feature branch)
             Rectangle()
                 .fill(note.colour)
                 .cornerRadius(8)
                 .shadow(radius: 2)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> be4e6e5 (Initial commit on my-feature branch)
             // 分类下拉菜单
             Menu {
                 ForEach(categories, id: \.self) { cat in
@@ -65,14 +82,20 @@ struct NoteView: View {
             .offset(x: handleSize + spacing, y: spacing)
 
             // 文本编辑或显示
+<<<<<<< HEAD
 =======
             //Text area + edit view
 >>>>>>> 64f1bef4d31f05b21eff382ba81af792b2b66864
+=======
+>>>>>>> be4e6e5 (Initial commit on my-feature branch)
             Group {
                 if note.isEditing {
                     TextEditor(text: $note.text)
                         .padding(8)
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> be4e6e5 (Initial commit on my-feature branch)
                         .focused($isFocused)
                         .onAppear { DispatchQueue.main.async { isFocused = true } }
                     
@@ -82,27 +105,36 @@ struct NoteView: View {
 
                 } else {
                     Text(note.text.isEmpty ? "New Note" : note.text)
+<<<<<<< HEAD
 =======
                 } else {
                     //default text
                     Text(note.text.isEmpty ? "New Note" : note.text)
                     //note.text :
 >>>>>>> 64f1bef4d31f05b21eff382ba81af792b2b66864
+=======
+>>>>>>> be4e6e5 (Initial commit on my-feature branch)
                         .padding(8)
                         .onTapGesture { note.isEditing = true }
                 }
             }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> be4e6e5 (Initial commit on my-feature branch)
             
             
             .frame(width: note.size.width, height: note.size.height)
             
             // 删除按钮
+<<<<<<< HEAD
 =======
             .frame(width: note.size.width, height: note.size.height)
 
             //delete button
 >>>>>>> 64f1bef4d31f05b21eff382ba81af792b2b66864
+=======
+>>>>>>> be4e6e5 (Initial commit on my-feature branch)
             Button(action: { onDelete(note.id) }) {
                 Image(systemName: "xmark")
                     .foregroundStyle(.black)
@@ -111,6 +143,9 @@ struct NoteView: View {
             .offset(x: note.size.width - handleSize, y: 0)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> be4e6e5 (Initial commit on my-feature branch)
             // 全屏切换按钮
             Button(action: { withAnimation(.easeInOut) { isFullScreen = true } }) {
                 Image(systemName: "arrow.up.left.and.arrow.down.right")
@@ -160,6 +195,7 @@ struct NoteView: View {
     }
 
     // 拖拽手势：禁用动画，实时更新位置
+<<<<<<< HEAD
 =======
             //move 'handle'
             Image(systemName: "square.dashed")
@@ -182,6 +218,8 @@ struct NoteView: View {
 
     //drag gesture updates position while moving, clamps to screen
 >>>>>>> 64f1bef4d31f05b21eff382ba81af792b2b66864
+=======
+>>>>>>> be4e6e5 (Initial commit on my-feature branch)
     private var dragGesture: some Gesture {
         DragGesture()
             .onChanged { v in
@@ -193,6 +231,9 @@ struct NoteView: View {
                                  min: safeTop + spacing,
                                  max: .infinity)
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> be4e6e5 (Initial commit on my-feature branch)
                 withAnimation(.none) {
                     note.position = CGPoint(x: newX, y: newY)
                 }
@@ -207,6 +248,7 @@ struct NoteView: View {
     }
 
     // 缩放手势
+<<<<<<< HEAD
 =======
                 note.position = CGPoint(x: newX, y: newY)
             }
@@ -218,6 +260,8 @@ struct NoteView: View {
 
     //resize updates size using drag gesture and clamps width
 >>>>>>> 64f1bef4d31f05b21eff382ba81af792b2b66864
+=======
+>>>>>>> be4e6e5 (Initial commit on my-feature branch)
     private var resizeGesture: some Gesture {
         DragGesture()
             .onChanged { v in
@@ -232,10 +276,14 @@ struct NoteView: View {
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     // 辅助：范围限制
 =======
     //clamp!
 >>>>>>> 64f1bef4d31f05b21eff382ba81af792b2b66864
+=======
+    // 辅助：范围限制
+>>>>>>> be4e6e5 (Initial commit on my-feature branch)
     private func clamp(_ value: CGFloat, min: CGFloat, max: CGFloat) -> CGFloat {
         Swift.min(Swift.max(value, min), max)
     }

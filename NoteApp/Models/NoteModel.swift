@@ -8,6 +8,9 @@
 import SwiftUI
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> be4e6e5 (Initial commit on my-feature branch)
 struct NoteModel: Identifiable, Codable, Equatable {
     let id: UUID
     // 存储颜色的 HSB 分量
@@ -93,6 +96,7 @@ struct NoteModel: Identifiable, Codable, Equatable {
         self.text = text
         self.category = category
     }
+<<<<<<< HEAD
 =======
 struct NoteModel: Identifiable {
     let id = UUID()
@@ -102,4 +106,6 @@ struct NoteModel: Identifiable {
     var text: String = ""
     var isEditing: Bool = false   
 >>>>>>> 64f1bef4d31f05b21eff382ba81af792b2b66864
+=======
+>>>>>>> be4e6e5 (Initial commit on my-feature branch)
 }

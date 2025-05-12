@@ -9,6 +9,9 @@ import SwiftUI
 
 struct ContentView: View {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> be4e6e5 (Initial commit on my-feature branch)
     // MARK: — Configuration —
     private let categories = ["All", "Uncategorized", "Work", "Personal", "Ideas", "Shopping"]
     private let categoryBarHeight: CGFloat = 50
@@ -104,6 +107,7 @@ struct ContentView: View {
 
     // MARK: — Helpers —
 
+<<<<<<< HEAD
 =======
     @State private var notes: [NoteModel] = []
     @State private var scrollHeight: CGFloat = UIScreen.main.bounds.height
@@ -162,6 +166,8 @@ struct ContentView: View {
 
     //locate the note being moved, sized, or edited
 >>>>>>> 64f1bef4d31f05b21eff382ba81af792b2b66864
+=======
+>>>>>>> be4e6e5 (Initial commit on my-feature branch)
     private func binding(for note: NoteModel) -> Binding<NoteModel> {
         guard let idx = notes.firstIndex(where: { $0.id == note.id }) else {
             fatalError("Note not found")
@@ -170,6 +176,9 @@ struct ContentView: View {
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> be4e6e5 (Initial commit on my-feature branch)
     private func delete(id: UUID) {
         // Remove the selected note, then fill its position
         if let idx = notes.firstIndex(where: { $0.id == id }) {
@@ -219,6 +228,7 @@ struct ContentView: View {
                                  text: "", category: cat)
         endEditing()
         withAnimation(.interactiveSpring(response: 0.3, dampingFraction: 0.7)) {
+<<<<<<< HEAD
 =======
     //position behaviour. Adds a new note in the first available spot or pushes others down
     private func addNote(in size: CGSize, safeTop: CGFloat) {
@@ -245,11 +255,14 @@ struct ContentView: View {
         endEditing()
         withAnimation(.spring()) {
 >>>>>>> 64f1bef4d31f05b21eff382ba81af792b2b66864
+=======
+>>>>>>> be4e6e5 (Initial commit on my-feature branch)
             notes.append(newNote)
             resolveOverlaps(in: size, safeTop: safeTop)
         }
     }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     private func reorderAfterMove(in size: CGSize, safeTop: CGFloat) {
 =======
@@ -267,6 +280,9 @@ struct ContentView: View {
     private func reorderAfterMove(id: UUID, in size: CGSize, safeTop: CGFloat) {
         //sort notes by position (left-right-down)
 >>>>>>> 64f1bef4d31f05b21eff382ba81af792b2b66864
+=======
+    private func reorderAfterMove(in size: CGSize, safeTop: CGFloat) {
+>>>>>>> be4e6e5 (Initial commit on my-feature branch)
         notes.sort { a, b in
             if abs(a.position.y - b.position.y) > 1 {
                 return a.position.y < b.position.y
@@ -275,6 +291,9 @@ struct ContentView: View {
             }
         }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> be4e6e5 (Initial commit on my-feature branch)
         let side = (size.width - 3 * horizontalPadding) / 2
         let step = side + horizontalPadding
         for (idx, _) in notes.enumerated() {
@@ -309,6 +328,7 @@ struct ContentView: View {
         scrollHeight = max(maxY + horizontalPadding, UIScreen.main.bounds.height)
     }
 
+<<<<<<< HEAD
 =======
         withAnimation(.spring()) {
             resolveOverlaps(in: size, safeTop: safeTop)
@@ -344,11 +364,16 @@ struct ContentView: View {
 
     //clamp method (can be merged to noteview)
 >>>>>>> 64f1bef4d31f05b21eff382ba81af792b2b66864
+=======
+>>>>>>> be4e6e5 (Initial commit on my-feature branch)
     private func clamp(_ value: CGFloat, min: CGFloat, max: CGFloat) -> CGFloat {
         Swift.min(Swift.max(value, min), max)
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> be4e6e5 (Initial commit on my-feature branch)
     private func zIndex(for note: NoteModel) -> Double {
         Double(notes.firstIndex(where: { $0.id == note.id }) ?? 0)
     }
@@ -406,6 +431,7 @@ private struct CategoryButton: View {
             }
         }
     }
+<<<<<<< HEAD
 =======
     //set new notes at top of view
     private func zIndex(for note: NoteModel) -> Double {
@@ -417,4 +443,6 @@ private struct CategoryButton: View {
 #Preview {
     ContentView()
 >>>>>>> 64f1bef4d31f05b21eff382ba81af792b2b66864
+=======
+>>>>>>> be4e6e5 (Initial commit on my-feature branch)
 }
