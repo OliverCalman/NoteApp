@@ -147,7 +147,7 @@ struct ContentView: View {
 
     private func addNote(in size: CGSize, safeTop: CGFloat) {
         let side = (size.width - 3 * spacing) / 2
-        let topY = safeTop + spacing + 100
+        let topY = safeTop + spacing + 50
         var leftColumnY: CGFloat = topY
         var rightColumnY: CGFloat = topY
 
@@ -184,7 +184,7 @@ struct ContentView: View {
     private func delete(id: UUID) {
         notes.removeAll { $0.id == id }
         withAnimation(.spring()) {
-            resolveOverlaps(in: UIScreen.main.bounds.size, safeTop: 100) // 你可以替换为 geo.size 和 safeTop 参数
+            resolveOverlaps(in: UIScreen.main.bounds.size, safeTop: 50) // 你可以替换为 geo.size 和 safeTop 参数
         }
     }
 

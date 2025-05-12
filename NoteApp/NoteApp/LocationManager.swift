@@ -49,7 +49,7 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     }
 
     private func fallbackToSydney() {
-        locationDescription = "Sydney NSW 2000"
+        locationDescription = "Ultimo NSW 2007"
         coordinate = fallbackCoordinate
     }
 }

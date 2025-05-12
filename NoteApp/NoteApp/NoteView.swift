@@ -68,7 +68,7 @@ struct NoteView: View {
                         if let location = note.locationText {
                             Text(location)
                                 .font(.caption2)
-                                .foregroundColor(.white.opacity(0.7))
+                                .foregroundColor(.gray)
                                 .padding(.horizontal, 6)
                         }
                     }
