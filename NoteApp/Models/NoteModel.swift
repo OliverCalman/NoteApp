@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-<<<<<<< HEAD
 struct NoteModel: Identifiable, Codable, Equatable {
     let id: UUID
     // 存储颜色的 HSB 分量
@@ -93,13 +92,4 @@ struct NoteModel: Identifiable, Codable, Equatable {
         self.text = text
         self.category = category
     }
-=======
-struct NoteModel: Identifiable {
-    let id = UUID()
-    var colour: Color
-    var position: CGPoint
-    var size: CGSize
-    var text: String = ""
-    var isEditing: Bool = false   
->>>>>>> 64f1bef4d31f05b21eff382ba81af792b2b66864
 }

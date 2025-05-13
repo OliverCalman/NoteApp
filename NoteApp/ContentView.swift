@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct ContentView: View {
-
     // MARK: — Configuration —
     private let categories = ["All", "Uncategorized", "Work", "Personal", "Ideas", "Shopping"]
     private let categoryBarHeight: CGFloat = 50
@@ -103,8 +102,6 @@ struct ContentView: View {
     }
 
     // MARK: — Helpers —
-
-
     private func binding(for note: NoteModel) -> Binding<NoteModel> {
         guard let idx = notes.firstIndex(where: { $0.id == note.id }) else {
             fatalError("Note not found")
@@ -161,40 +158,12 @@ struct ContentView: View {
                                  text: "", category: cat)
         endEditing()
         withAnimation(.interactiveSpring(response: 0.3, dampingFraction: 0.7)) {
-=======
-    //position behaviour. Adds a new note in the first available spot or pushes others down
-    private func addNote(in size: CGSize, safeTop: CGFloat) {
-        let side = (size.width - 3*spacing) / 2
-        let topY = safeTop + spacing
-        //compute X slots and select first free
-        var xs = [spacing]
-        notes.filter { abs($0.position.y - topY) < 1 }.forEach {
-            xs.append($0.position.x + $0.size.width + spacing)
-        }
-        xs.sort()
-        let xPos = xs.first(where: { x in
-            x + side <= size.width - spacing &&
-            !notes.contains(where: { CGRect(origin: CGPoint(x: x, y: topY), size: CGSize(width: side, height: side)).intersects(CGRect(origin: $0.position, size: $0.size)) })
-        }) ?? spacing
-        //push down if needed
-        if xPos == spacing && notes.contains(where: { $0.position.y == topY && $0.position.x == spacing }) {
-            notes.indices.forEach { notes[$0].position.y += side + spacing }
-        }
-        //append new note
-        let newNote = NoteModel(colour: Color(hue: Double.random(in: 0...1), saturation: 0.3, brightness: 1),
-                                position: CGPoint(x: xPos, y: topY),
-                                size: CGSize(width: side, height: side))
-        endEditing()
-        withAnimation(.spring()) {
-
             notes.append(newNote)
             resolveOverlaps(in: size, safeTop: safeTop)
         }
     }
 
-
     private func reorderAfterMove(in size: CGSize, safeTop: CGFloat) {
-
         notes.sort { a, b in
             if abs(a.position.y - b.position.y) > 1 {
                 return a.position.y < b.position.y
