@@ -102,7 +102,6 @@ struct ContentView: View {
     }
 
     // MARK: — Helpers —
-
     private func binding(for note: NoteModel) -> Binding<NoteModel> {
         guard let idx = notes.firstIndex(where: { $0.id == note.id }) else {
             fatalError("Note not found")

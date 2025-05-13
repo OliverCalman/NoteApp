@@ -65,9 +65,7 @@ struct NoteView: View {
                         .padding(8)
                         .onTapGesture { note.isEditing = true }
                 }
-            }
-            
-            
+            }         
             .frame(width: note.size.width, height: note.size.height)
             
             // 删除按钮
