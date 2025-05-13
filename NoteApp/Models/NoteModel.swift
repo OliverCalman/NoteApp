@@ -2,94 +2,86 @@
 //  NoteModel.swift
 //  NoteApp
 //
-//  Created by Oliver Calman on 7/5/2025.
-//
+//  Updated: Added locationText field to support GPS-tagged notes
 
 import SwiftUI
+import CoreLocation
 
-struct NoteModel: Identifiable, Codable, Equatable {
+struct NoteModel: Identifiable, Codable {
     let id: UUID
-    // 存储颜色的 HSB 分量
-    var hue: Double
-    var saturation: Double
-    var brightness: Double
-
+    var colourHex: String
     var position: CGPoint
     var size: CGSize
-
     var text: String
+    var isEditing: Bool
     var category: String
-
-    // 编辑状态，不参与持久化
-    var isEditing: Bool = false
-
-    // 计算属性，方便 SwiftUI 使用
-    var colour: Color {
-        Color(hue: hue, saturation: saturation, brightness: brightness)
+    var tags: [String]
+    var locationText: String?
+    
+    // 🆕 地图支持字段
+    var latitude: Double?
+    var longitude: Double?
+    
+    var coordinate: CLLocationCoordinate2D? {
+        if let lat = latitude, let lon = longitude {
+            return CLLocationCoordinate2D(latitude: lat, longitude: lon)
+        }
+        return nil
     }
 
-    // 序列化键
-    enum CodingKeys: String, CodingKey {
-        case id, hue, saturation, brightness
-        case positionX, positionY, width, height
-        case text, category
-    }
-
-    // 解码
-    init(from decoder: Decoder) throws {
-        let c = try decoder.container(keyedBy: CodingKeys.self)
-        id = try c.decode(UUID.self, forKey: .id)
-        hue = try c.decode(Double.self, forKey: .hue)
-        saturation = try c.decode(Double.self, forKey: .saturation)
-        brightness = try c.decode(Double.self, forKey: .brightness)
-
-        let x = try c.decode(CGFloat.self, forKey: .positionX)
-        let y = try c.decode(CGFloat.self, forKey: .positionY)
-        position = CGPoint(x: x, y: y)
-
-        let w = try c.decode(CGFloat.self, forKey: .width)
-        let h = try c.decode(CGFloat.self, forKey: .height)
-        size = CGSize(width: w, height: h)
-
-        text = try c.decode(String.self, forKey: .text)
-        category = try c.decode(String.self, forKey: .category)
-    }
-
-    // 编码
-    func encode(to encoder: Encoder) throws {
-        var c = encoder.container(keyedBy: CodingKeys.self)
-        try c.encode(id, forKey: .id)
-        try c.encode(hue, forKey: .hue)
-        try c.encode(saturation, forKey: .saturation)
-        try c.encode(brightness, forKey: .brightness)
-
-        try c.encode(position.x, forKey: .positionX)
-        try c.encode(position.y, forKey: .positionY)
-
-        try c.encode(size.width, forKey: .width)
-        try c.encode(size.height, forKey: .height)
-
-        try c.encode(text, forKey: .text)
-        try c.encode(category, forKey: .category)
-    }
-
-    // 方便初始化
-    init(colour: Color,
-         position: CGPoint,
-         size: CGSize,
-         text: String = "",
-         category: String = "Uncategorized")
-    {
-        self.id = .init()
-        // 提取 HSB
-        let ui = UIColor(colour)
-        var h: CGFloat = 0, s: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
-        ui.getHue(&h, saturation: &s, brightness: &b, alpha: &a)
-        hue = Double(h); saturation = Double(s); brightness = Double(b)
-
+    init(
+        id: UUID = UUID(),
+        colour: Color,
+        position: CGPoint,
+        size: CGSize,
+        text: String = "",
+        isEditing: Bool = false,
+        category: String = "Uncategorized",
+        tags: [String] = [],
+        locationText: String? = nil,
+        latitude: Double? = nil,
+        longitude: Double? = nil
+    ) {
+        self.id = id
+        self.colourHex = colour.toHex() ?? "#FFFFFF"
         self.position = position
         self.size = size
         self.text = text
+        self.isEditing = isEditing
         self.category = category
+        self.tags = tags
+        self.locationText = locationText
+        self.latitude = latitude
+        self.longitude = longitude
+    }
+
+    var colour: Color {
+        Color(hex: colourHex) ?? .white
+    }
+}
+
+
+// MARK: - Extensions for Color Codable Support
+extension Color {
+    init?(hex: String) {
+        let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
+        var int = UInt64()
+        Scanner(string: hex).scanHexInt64(&int)
+        let r, g, b: UInt64
+        switch hex.count {
+        case 6:
+            (r, g, b) = ((int >> 16) & 0xFF, (int >> 8) & 0xFF, int & 0xFF)
+        default:
+            return nil
+        }
+        self.init(.sRGB, red: Double(r)/255, green: Double(g)/255, blue: Double(b)/255, opacity: 1)
+    }
+
+    func toHex() -> String? {
+        guard let components = UIColor(self).cgColor.components, components.count >= 3 else { return nil }
+        let r = Int(components[0] * 255)
+        let g = Int(components[1] * 255)
+        let b = Int(components[2] * 255)
+        return String(format: "#%02X%02X%02X", r, g, b)
     }
 }
